@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Laboratorio 4</title>
+</head>
+<body>
+
+    <div class="titulo">
+        <H1>Laboratorio #4</H1>
+    </div>
+
+    <div class="content">
+
+        <div class="princ">
+            <h1>Validador de palindromos</h1>
+            <p>Ingresar un numero para validar si es un palindromo de doble base.</p>
+            <form id="palindrome" action="#">
+                <input id="palindromeValue" name="palindromeValue" type="text" placeholder="12345">
+                <br>
+                <input type="submit" value="Validar">
+            </form>
+
+            <p id="palindromeOutput" class="resp"></p>
+
+        </div>
+
+        <div class="princ">
+            <h1>contador de caracteres</h1>
+            <p>Ingrese una palabra para contaran cuantos caracteres tiene de caracteres.</p>
+            <form id="cont" action="#">
+                <input id="contValue" name="contValue" type="text">
+                <br>
+                <input type="submit" value="Contar">
+            </form>
+
+            <p id="contOutput" class="resp"></p>
+
+        </div>
+
+        <div class="princ">
+            <h1>Validador de año bisiesto</h1>
+            <p>Ingrese un año y se validara si es biciesto.</p>
+            <form id="bis" action="#">
+                <input id="bisValue" name="bisValue" type="text">
+                <br>
+                <input type="submit" value="Validar">
+            </form>
+
+            <p id="bisOutput" class="resp"></p>
+
+        </div>
+
+        <div class="princ">
+            <h1>suma de unidades</h1>
+            <p>Ingrese un número para mostrar la suma de los números primos de 0 hasta el número.</p>
+            <form id="sum" action="#">
+                <input id="sumValue" name="sumValue" type="text">
+                <br>
+                <input type="submit" value="Sumar">
+            </form>
+
+            <p id="sumOutput" class="resp"></p>
+
+        </div>
+
+    </div>
+
+
+
+    <p id="calculator-result"></p>    
+    <script>
+        (() => {
+            const App = {
+                htmlElements: {
+                    palindrome: document.getElementById('palindrome'),
+                    cont: document.getElementById('cont'),
+                    bis: document.getElementById('bis'),
+                    sum: document.getElementById('sum'),
+
+                    palindromeValue: document.getElementById('palindromeValue'),
+                    contValue: document.getElementById('contValue'),
+                    bisValue: document.getElementById('bisValue'),
+                    sumValue: document.getElementById('sumValue'),
+
+                    palindromeResult: document.getElementById('palindromeOutput'),
+                    contResult: document.getElementById('contOutput'),
+                    bisResult: document.getElementById('bisOutput'),
+                    sumResult: document.getElementById('sumOutput'),
+                },
+                init: () => {
+                    App.bindEvents();
+                },
+                bindEvents: () => {
+                    App.htmlElements.palindrome.addEventListener('submit', App.events.onPalindromeSubmit);
+                    App.htmlElements.cont.addEventListener('submit', App.events.oncontSubmit);
+                    App.htmlElements.bis.addEventListener('submit', App.events.onbisSubmit);
+                    App.htmlElements.sum.addEventListener('submit', App.events.onsumSubmit);
+                },
+                events: {
+                    onPalindromeSubmit: (event) => {
+                        event.preventDefault();
+
+                        const value = String(App.htmlElements.palindromeValue.value);
+
+                        var a = false;
+                        var b = false;
+
+                        var splitString = String(value).split("");
+                        var reverseArray = splitString.reverse();
+                        var joinArray = reverseArray.join("");
+                        
+                        if (String(value) == joinArray){
+
+                            a = true;
+
+                        }
+
+                        var bin = (value >>> 0).toString(2);
+                        
+                        splitString = String(bin).split("");
+                        reverseArray = splitString.reverse();
+                        joinArray = reverseArray.join(""); 
+                        
+                        if (String(bin) == joinArray){
+
+                            b = true;
+
+                        }
+
+                        if(a == true && b == true){
+
+                            const res = `El número es un palindromo de doble base.`;
+                            App.htmlElements.palindromeResult.innerText = res;
+
+                            document.getElementById("palindromeOutput").style.visibility = "visible";
+
+                        }
+                        else{
+
+                            const res = `El número no es un palindromo de doble base.`;
+                            App.htmlElements.palindromeResult.innerText = res;
+
+                            document.getElementById("palindromeOutput").style.visibility = "visible";
+
+                        }
+
+
+
+                    },
+
+                    oncontSubmit: (event) => {
+
+                        event.preventDefault();
+
+                        const value = String(App.htmlElements.contValue.value);
+
+                        var object = {};
+
+                        for (let i = 0; i < Object.keys(value).length; i++){
+
+                            if (object[value[i]]) {
+                                object[value[i]]++;
+                            }else{
+                                object[value[i]] = 1;
+                            } 
+
+                        }
+
+                        const res = JSON.stringify(object);
+                        App.htmlElements.contResult.innerText = res;
+                        document.getElementById("contOutput").style.visibility = "visible";
+                    },
+
+                    onbisSubmit: (event) => {
+
+                        event.preventDefault();
+
+                        const value = Number(App.htmlElements.bisValue.value);
+
+                        console.log(value);
+
+                        var res = '';
+                        
+                        if (((value % 4 == 0) && (value % 100 != 0 )) || (value % 400 == 0)){
+
+                            res = `El año es bisiesto.`;
+                        
+                        }
+                        else{
+
+                            res = `El año no es bisiesto.`;
+
+                        }
+                        
+                        App.htmlElements.bisResult.innerText = res;
+                        document.getElementById("bisOutput").style.visibility = "visible";
+                    },
+
+                    onsumSubmit: (event) => {
+                        event.preventDefault();
+
+
+                        const value = Number(App.htmlElements.sumValue.value);
+
+                        var suma=2;
+
+                        for (let i = value; i > 0; i--){
+
+                            if (i % 2 == 0)
+                            {
+                                
+                            }
+                            else{
+
+                                suma = suma + i;
+
+                            }
+                        }
+
+                        const res = suma;
+
+                        console.log(suma)
+
+                        App.htmlElements.sumResult.innerText = res;
+
+                        document.getElementById("sumOutput").style.visibility = "visible";
+                        
+                    },
+                },
+            };
+
+            App.init();
+        })();
+    </script>
+</body>
+</html>
+
